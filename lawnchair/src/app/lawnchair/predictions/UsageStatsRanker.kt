@@ -112,8 +112,8 @@ class UsageStatsRanker(private val context: Context) {
             if (packageName.isNullOrEmpty() || packageName == context.packageName) return@forEach
 
             val durationDampened = when {
-                stat.totalTimeInForeground <= 0 -> 0
-                else -> log10((1 + (stat.totalTimeInForeground) / (maxDuration)).toDouble())
+                stat.totalTimeInForeground <= 0L || maxDuration <= 0L -> 0.0
+                else -> log10(1.0 + stat.totalTimeInForeground.toDouble() / maxDuration.toDouble())
             }.toDouble()
 
             val decayHalfLife = window.durationMs / 2
